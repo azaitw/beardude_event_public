@@ -20,20 +20,10 @@ npm test
 npm run build
 ```
 
-**Start local production server with [serve](https://github.com/zeit/serve):**
+**Start local production server:**
 
 ```sh
 npm start
-```
-
----
-
-```js
-<Router>
-  <A path="/" />
-  <B path="/b" id="42" />
-  <C path="/c/:id" />
-</Router>
 ```
 
 
