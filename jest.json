@@ -1,0 +1,6 @@
+{
+  "testResultsProcessor": "./node_modules/jest-junit",
+  "setupFiles": [
+    "./node_modules/babel-polyfill/lib/index.js"
+  ]
+}
