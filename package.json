@@ -8,7 +8,7 @@
     "prestart": "npm run build",
     "build": "NODE_ENV=production webpack --progress",
     "prebuild": "rm -rf build; mkdir build;ncp src/assets build/assets",
-    "test": "npm run -s lint && jest --coverage",
+    "test": "jest --coverage",
     "test:watch": "npm run -s test -- --watch",
     "lint": "standard --env jest"
   },
@@ -83,6 +83,8 @@
     "webpack-dev-server": "^2.4.4"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "firebase": "^4.3.0",
     "preact": "^8.1.0",
     "preact-compat": "^3.15.0",
     "preact-render-to-string": "^3.6.0",
