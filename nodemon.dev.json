@@ -1,0 +1,10 @@
+{
+  "verbose": true,
+  "exec": "webpack-dev-server --config webpack.config.babel.js --inline --hot --progress",
+  "watch": [
+    ".babelrc"
+  ],
+  "events": {
+    "restart": "osascript -e 'display notification \"beardude react restarting\" with title \"nodemon\"'"
+  }
+}

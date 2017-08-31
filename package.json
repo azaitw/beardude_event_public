@@ -3,7 +3,7 @@
   "version": "6.0.0",
   "description": "beardude cycling land",
   "scripts": {
-    "dev": "NODE_ENV=development webpack-dev-server --inline --hot --progress",
+    "dev": "nodemon -e xyz --config nodemon.dev.json",
     "start": "serve build -s -c 1",
     "prestart": "npm run build",
     "build": "NODE_ENV=production webpack --progress",
@@ -66,6 +66,7 @@
     "less": "^2.7.1",
     "less-loader": "^4.0.3",
     "ncp": "^2.0.0",
+    "nodemon": "^1.11.0",
     "offline-plugin": "^4.7.0",
     "postcss-loader": "^2.0.3",
     "preact-jsx-chai": "^2.2.1",
@@ -85,12 +86,14 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "firebase": "^4.3.0",
-    "preact": "^8.1.0",
-    "preact-compat": "^3.15.0",
-    "preact-render-to-string": "^3.6.0",
-    "preact-router": "^2.5.1",
+    "preact": "8.2.5",
+    "preact-compat": "3.17.0",
+    "preact-render-to-string": "3.6.3",
+    "preact-router": "2.5.7",
     "promise-polyfill": "^6.0.2",
     "proptypes": "^1.0.0",
-    "serve": "^6.0.0"
+    "serve": "^6.0.0",
+    "socket.io-client": "^2.0.3",
+    "whatwg-fetch": "^2.0.3"
   }
 }
