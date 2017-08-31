@@ -195,8 +195,7 @@ const processData = {
       })
       return result
     })
-    nextState.nameTables.race = processData.returnIdNameMap(payload.races)
-    return nextState
+    return races
   }
 }
 
