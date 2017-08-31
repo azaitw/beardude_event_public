@@ -144,9 +144,7 @@ class Event extends Component {
       fetch(`/api/socket/info?sid=${this.socketio.id}`, {credentials: 'same-origin'}).then(V => { if (callback !== undefined) { callback() } })
     }.bind(this))
     this.socketio.on('eventlatencyupdate', function (data) {
-      console.log('eventlatencyupdate data: ', data)
       this.setState({event: {...this.state.event, resultLatency: data.event.resultLatency }})
-      this.dispatch(eventActions.updateEventLatency(data))
     }.bind(this))
     this.socketio.on('raceupdate', function (data) {
       setTimeout(function () {
