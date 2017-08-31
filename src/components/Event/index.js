@@ -105,8 +105,10 @@ class Event extends Component {
           let defer = []
           output.recordsHashTable = processData.returnDeferredHashTable(output.recordsHashTable, res.event.resultLatency)
           output.raceStatus = processData.returnDeferredRaceStatus(output.raceStatus, res.event.resultLatency, output.endTime)
+          output.result = processData.returnRaceResult(output, res.registrations)
           //defer = processData.returnDeferredTimeArray(V.recordsHashTable, output.recordsHashTable, res.event.resultLatency)
           //deferredTimes = deferredTimes.concat(defer)
+          console.log('output: ', output)
           return output
         })
         this.setState({
