@@ -7,6 +7,8 @@ import OfflinePlugin from 'offline-plugin'
 import path from 'path'
 const ENV = process.env.NODE_ENV || 'development'
 
+const hostname = 'localhost'
+const port = '8080'
 const CSS_MAPS = ENV !== 'production'
 
 module.exports = {
@@ -115,6 +117,9 @@ module.exports = {
     ]
   },
   plugins: ([
+    new webpack.DefinePlugin({
+      'SERVICE_URL': JSON.stringify('http://' + hostname + ':' + port)
+    }),
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({
       filename: 'style.css',
@@ -195,19 +200,28 @@ module.exports = {
   devtool: ENV === 'production' ? 'source-map' : 'cheap-module-eval-source-map',
 
   devServer: {
-    port: process.env.PORT || 8080,
-    host: 'localhost',
-    publicPath: '/',
     contentBase: './src',
+    hot: true,
+    host: hostname,
+    publicPath: '/',
     historyApiFallback: true,
-    open: true,
-    openPage: '',
+    port: port,
     proxy: {
-      // OPTIONAL: proxy configuration:
-      // '/optional-prefix/**': { // path pattern to rewrite
-      //   target: 'http://target-host.com',
-      //   pathRewrite: path => path.replace(/^\/[^\/]+\//, '')   // strip first path segment
-      // }
+      '/api/**/**': {
+        target: 'http://' + hostname + ':1337',
+        secure: false,
+        changeOrigin: true
+      },
+      '/socket.io/**/**': {
+        target: 'http://' + hostname + ':1337',
+        secure: false,
+        changeOrigin: true
+      },
+      '/sockjs-node/**/**': {
+        target: 'http://' + hostname + ':1337',
+        secure: false,
+        changeOrigin: true
+      }
     }
   }
 }
