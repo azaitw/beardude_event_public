@@ -1,45 +1,153 @@
-@import '~style/helpers';
+@import '../../style/index.css';
 
-.header {
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 56px;
-	padding: 0;
-	background: #91B8DA;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-	z-index: 50;
+.mainHeader {
+    height: 45px;
+    position: relative;
+    z-index: 20;
+}
+.heading {
+    position: relative;
+    display: inline-block;
+}
+.bdlogo {
+    position: relative;
+    float: left;
+    font-size: 14.5px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 17px;
+    margin: 0 0 0 10px;
+    letter-spacing: 0.4px;
+}
+.bdlogo a:link,
+.bdlogo a:visited {
+    color: #ebf5fc;
+    text-decoration: none;
+}
+.logoB, .logoE {
+    padding: 0 0 0 5px;
+}
+.navContainer,
+.navContainer li {
+    position: relative;
+    display: inline-block;
+    height: 45px;
+    line-height: 45px;
+    margin: 0 12px;
+    vertical-align: top;
+}
+.navContainer {
+    float: right;
+    margin: 0 40px 0 0;
+}
+.navContainer:after {
+    display: block;
+    content: "|";
+    float: right;
+    color: #ebf5fc;
+    padding: 0 0 0 15px;
+}
+.navContainer:after {
+    display: block;
+    content: "|";
+    float: right;
+    color: #ebf5fc;
+    padding: 0 0 0 15px;
+}
+.navContainer a:hover {
+    color: #158fe2;
+    text-decoration: none;
+}
+.nav {
+    color: #ebf5fc;
+    text-decoration: none;
+    font-size: 15px;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: solid 1px transparent;
+}
+.navActive {
+    composes: nav;
+    color: #fff;
+    background: rgba(221, 221, 221, 0.48);
+    border-color: #fff;
+}
+.navActive:hover {
+  color: #eee;
+}
+.account {
+    position: relative;
+    margin: 0 10px 0 0;
+    float: right;
+    line-height: 45px;
+    letter-spacing: 0.2px;
+}
+.accountLink {
+    position: relative;
+    display: block;
+    background: none;
+    font-size: 15px;
+    line-height: 45px;
+    padding: 1px 25px 0 0;
+    color: #ebf5fc;
+    cursor: pointer;
+}
+.accountLink:hover {
+    color: #158fe2;
+    text-decoration: none;
+}
+.accountLink:before {
+    position: absolute;
+    top: 23px;
+    display: block;
+    content: " ";
+    width: 6px;
+    height: 1px;
+    background: #ebf5fc;
+    right: 10px;
+    transform: rotate(40deg);
+}
+.accountLink:after {
+    position: absolute;
+    top: 23px;
+    display: block;
+    content: " ";
+    width: 6px;
+    height: 1px;
+    background: #ebf5fc;
+    right: 6px;
+    transform: rotate(-40deg);
+}
+.aMenuItem {
+    display: block;
+    text-indent: 10px;
+}
+.aMenuItem:link,
+.aMenuItem:visited {
+    text-decoration: none;
+    color: #ebf5fc;
+}
 
-	h1 {
-		float: left;
-		margin: 0;
-		padding: 0 15px;
-		font-size: 24px;
-		line-height: 56px;
-		font-weight: 400;
-		color: #FFF;
-	}
-
-	nav {
-		float: right;
-		font-size: 100%;
-
-		a {
-			display: inline-block;
-			height: 56px;
-			line-height: 56px;
-			padding: 0 15px;
-			min-width: 50px;
-			text-align: center;
-			background: rgba(255,255,255,0);
-			text-decoration: none;
-			color: #EEE;
-			will-change: background-color;
-
-			&:hover, &:active {
-				background: rgba(255,255,255,0.3);
-			}
-		}
-	}
+.accountMenu {
+    position: absolute;
+    width: 100%;
+    margin: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+@media only screen and (max-width : 780px) {
+  .accountLink {
+    font-size: 0;
+  }
+  .navContainer {
+    margin: 0;
+  }
+  .navContainer li {
+    margin: 0 2px;
+  }
+  .nav {
+    padding: 4px;
+  }
+  .navContainer:after {
+    padding: 0;
+  }
 }

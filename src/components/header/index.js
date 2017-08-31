@@ -1,17 +1,19 @@
 import { h, Component } from 'preact'
 import { Link } from 'preact-router'
-import style from './style.less'
+import css from './style.less'
 
 export default class Header extends Component {
   render () {
-    return (
-      <header class={style.header}>
-        <h1>Beardude Land</h1>
-        <nav>
-          <Link href='/'>Home</Link>
-          <Link href='/profile'>About</Link>
-        </nav>
-      </header>
-    )
+    return (<div className={css.mainHeader}>
+      <div className={css.heading}>
+        <h1 className={css.bdlogo}>
+          <Link href='/'>
+            <span className={css.logoB}>Beardude</span>
+            <span className={css.logoE}>Event</span>
+          </Link>
+        </h1>
+      </div>
+
+    </div>)
   }
 }

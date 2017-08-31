@@ -3,7 +3,7 @@ import { Router } from 'preact-router'
 import 'preact/devtools'
 import Home from './home'
 import Eventlist from './Eventlist'
-import PublicEvent from './PublicEvent'
+import Event from './Event'
 import Profile from './profile'
 
 
@@ -21,7 +21,7 @@ export default class App extends Component {
       <div id="app">
         <Router onChange={this.handleRoute}>
           <Eventlist path="/" />
-          <PublicEvent path="/event/:uniqueName" />
+          <Event path="/event/:uniqueName" />
         </Router>
       </div>
     );
