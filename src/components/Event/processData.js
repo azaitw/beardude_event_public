@@ -180,12 +180,32 @@ const processData = {
     return output
   },
   // 回傳排序過的比賽
-  returnRacesByOrder: function (races, order) {
+  returnRacesByOrder: (races, order) => {
     let result = []
     order.map(raceId => { races.map(race => { if (race.id === raceId) { result.push(race) } }) })
     return result
   },
-  updateRaces: function (racesOrg, racesNew, registrations) {
+  returnDate: (ts) => {
+    const diff = 28800000 // diff between taipei and utc in ms
+    const obj = new Date(ts + diff)
+    const MT = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    const M = MT[obj.getUTCMonth()]
+    let d = obj.getUTCDate()
+    return `${M} ${d}`
+  },
+  returnTime: (ts) => {
+    const diff = 28800000 // diff between taipei and utc in ms
+    const obj = new Date(ts + diff)
+    let h = obj.getUTCHours()
+    const m = ('0' + obj.getUTCMinutes()).slice(-2)
+    let ampm = 'am'
+    if (h >= 12) {
+      ampm = 'pm'
+      if (h > 12) { h = h - 12 }
+    }
+    return `${h}:${m}${ampm}`
+  },
+  updateRaces: (racesOrg, racesNew, registrations) => {
     let races = racesOrg.map(raceOrg => {
       let result = {...raceOrg}
       racesNew.map(raceNew => {

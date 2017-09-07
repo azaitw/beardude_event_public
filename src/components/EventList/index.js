@@ -1,19 +1,13 @@
+/* global fetch, SERVICE_URL */
 import { h, Component } from 'preact'
 import css from './style.css'
-import Header from '../Header'
 import { Link } from 'preact-router'
-
-const EventBrick = ({ events = [] }) =>
-events.length > 0
-? events.map(raceEvent =>
-  <li key={'event-' + raceEvent.id}>
-    <Link class={css.bigIcon} href={'/event/' + raceEvent.uniqueName}>{raceEvent.nameCht}</Link>
-  </li>)
-: null
+import Header from '../Header'
 
 class EventList extends Component {
-  state = {
-    events: []
+  constructor () {
+    super()
+    this.state = { events: [] }
   }
   componentDidMount () {
     const getEvents = async () => {
@@ -25,13 +19,15 @@ class EventList extends Component {
     }
     getEvents()
   }
-  render ({}, {events}) {
+  render () {
     return (
       <div className={css.wrap}>
-        <Header location={location} nav='base' />
+        <Header />
         <div className={css.mainBody}>
           <ul className={css.iconView}>
-            {EventBrick({events})}
+            {this.state.events.length > 0 && this.state.events.map(raceEvent =>
+              <li key={'event-' + raceEvent.id}><Link class={css.bigIcon} href={`/event/${raceEvent.uniqueName}/home`}>{raceEvent.nameCht}</Link></li>
+            )}
           </ul>
         </div>
       </div>
