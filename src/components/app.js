@@ -1,27 +1,20 @@
 import { h, Component } from 'preact'
-import { Router } from 'preact-router'
+import { route, Router } from 'preact-router'
 import 'preact/devtools'
-import Home from './home'
 import Eventlist from './Eventlist'
 import Event from './Event'
-import Profile from './profile'
-
 
 export default class App extends Component {
-/** Gets fired when the route changes.
- *  @param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
- *  @param {string} event.url	The newly routed URL
- */
-  handleRoute = e => {
-    this.currentUrl = e.url;
-  };
+  handleRoute = (e) => {
+    this.currentUrl = e.url
+  }
 
-  render() {
+  render () {
     return (
       <div id="app">
         <Router onChange={this.handleRoute}>
           <Eventlist path="/" />
-          <Event path="/event/:uniqueName" />
+          <Event path="/event/:uniqueName/:tab" />
         </Router>
       </div>
     );

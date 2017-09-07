@@ -1,5 +1,3 @@
-@import '../../style/index.css';
-
 .mainHeader {
     height: 45px;
     position: relative;
@@ -18,14 +16,35 @@
     font-size: 17px;
     margin: 0 0 0 10px;
     letter-spacing: 0.4px;
-}
-.bdlogo a:link,
-.bdlogo a:visited {
     color: #ebf5fc;
-    text-decoration: none;
 }
-.logoB, .logoE {
-    padding: 0 0 0 5px;
+.bdlogo>span {
+  padding: 0 0 0 5px;
+}
+.eventName {
+    position: relative;
+    float: left;
+    font-size: 14.5px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 17px;
+    margin: 0 0 0 10px;
+    letter-spacing: 0.4px;
+    color: #bbb;
+}
+.eventName a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.eventName a:hover,
+.eventName .active {
+  color: #eee;
+  text-decoration: none;
+}
+.eventName .active {
+  color: #fff;
+  font-weight: 700;
 }
 .navContainer,
 .navContainer li {
@@ -40,40 +59,33 @@
     float: right;
     margin: 0 40px 0 0;
 }
-.navContainer:after {
-    display: block;
-    content: "|";
-    float: right;
-    color: #ebf5fc;
-    padding: 0 0 0 15px;
-}
-.navContainer:after {
-    display: block;
-    content: "|";
-    float: right;
-    color: #ebf5fc;
-    padding: 0 0 0 15px;
+.navContainer a {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .navContainer a:hover {
-    color: #158fe2;
+    color: #eee;
     text-decoration: none;
 }
 .nav {
-    color: #ebf5fc;
+    color: #bbb;
     text-decoration: none;
     font-size: 15px;
-    padding: 4px 12px;
+    padding: 0 8px;
     border-radius: 6px;
     border: solid 1px transparent;
+    text-align: center;
 }
 .navActive {
     composes: nav;
     color: #fff;
-    background: rgba(221, 221, 221, 0.48);
-    border-color: #fff;
+    font-weight: 700;
 }
-.navActive:hover {
-  color: #eee;
+.navActive:link,
+.navActive:visited {
+  color: #fff;
+  text-decoration: none;
 }
 .account {
     position: relative;
