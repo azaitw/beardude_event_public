@@ -53,7 +53,7 @@ const processData = {
   },
   // 回傳可晉級的比賽ID
   returnAdvanceToId: (index, advancingRules) => {
-    for (var i = 0; i < advancingRules.length; i += 1) {
+    for (let i = 0; i < advancingRules.length; i += 1) {
       if (index >= advancingRules[i].rankFrom && index <= advancingRules[i].rankTo) { return advancingRules[i].toRace }
     }
     return undefined
@@ -132,7 +132,7 @@ const processData = {
         if (racesToAdvanceHashTable[record.advanceTo].registrationIds.indexOf(record.registration) === -1) { racesToAdvanceHashTable[record.advanceTo].registrationIds.push(record.registration) }
       }
     })
-    for (var i in racesToAdvanceHashTable) {
+    for (let i in racesToAdvanceHashTable) {
       output.push(racesToAdvanceHashTable[i])
     }
     return output
@@ -141,8 +141,8 @@ const processData = {
   returnSelectedRace: (orderedRaces, ongoingRace) => {
     if (ongoingRace) { return ongoingRace }
     const selectedRaceStatusByOrder = ['started', 'ended', 'init']
-    for (var i = 0; i < selectedRaceStatusByOrder.length; i += 1) {
-      for (var j = 0; j < orderedRaces.length; j += 1) {
+    for (let i = 0; i < selectedRaceStatusByOrder.length; i += 1) {
+      for (let j = 0; j < orderedRaces.length; j += 1) {
         if (orderedRaces[j].raceStatus === selectedRaceStatusByOrder[i]) { return j }
       }
     }
@@ -152,7 +152,7 @@ const processData = {
   returnDeferredHashTable: (hashTable, latency) => {
     const now = Date.now()
     let output = {}
-    for (var i in hashTable) {
+    for (let i in hashTable) {
       let result = []
       hashTable[i].map(V => { if ((V + latency) <= now) { result.push(V) } })
       output[i] = result

@@ -1,6 +1,6 @@
 import { fireBaseConfig } from './consts'
 
-export default async function loadDB() {
+export default async function loadDB () {
   const firebase = await import('firebase')
 
   try {
