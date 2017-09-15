@@ -14,7 +14,17 @@ const CSS_MAPS = ENV !== 'production'
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: ['babel-polyfill', './index.js'],
-
+//  vendor: ['socket.io-client', 'whatwg-fetch'],
+/*
+  entry: {
+    main: [
+      'babel-polyfill', './src/index'
+    ],
+    vendor: [
+      'react', 'react-dom', 'redux', 'react-redux', 'redux-thunk', 'url-search-params-polyfill', 'socket.io-client', 'whatwg-fetch'
+    ]
+  },
+*/
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
@@ -118,7 +128,7 @@ module.exports = {
   },
   plugins: ([
     new webpack.DefinePlugin({
-      'SERVICE_URL': JSON.stringify('http://' + hostname + ':' + port)
+      'SERVICE_URL': JSON.stringify('https://azai.synology.me:8080')
     }),
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({
