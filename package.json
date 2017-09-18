@@ -6,7 +6,7 @@
     "dev": "nodemon -e xyz --config nodemon.dev.json",
     "start": "serve build -s -c 1",
     "prestart": "npm run build",
-    "build": "NODE_ENV=production webpack --progress",
+    "build": "NODE_ENV=production webpack",
     "prebuild": "rm -rf build; mkdir build;ncp src/assets build/assets",
     "test": "jest --coverage",
     "test:watch": "npm run -s test -- --watch",
