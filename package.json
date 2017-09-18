@@ -61,6 +61,7 @@
     "eslint": "^4.1.0",
     "eslint-plugin-jest": "^20.0.0",
     "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-node": "4.2.3",
     "eslint-plugin-promise": "*",
     "eslint-plugin-react": "^7.0.0",
     "eslint-plugin-standard": "*",
