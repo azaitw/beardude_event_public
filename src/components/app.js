@@ -1,7 +1,7 @@
 import { h, Component } from 'preact'
 import { Router } from 'preact-router'
 import 'preact/devtools'
-import Eventlist from './Eventlist'
+import Eventlist from './EventList'
 import Event from './Event'
 
 export default class App extends Component {
