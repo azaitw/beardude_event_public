@@ -9,4 +9,5 @@ const Header = ({name, uniqueName, navs}) => <div className={css.mainHeader}>
       <ul className={css.navContainer}>{navs.map(nav => <li key={'nav-' + nav.key}><Link activeClassName={css.navActive} className={css.nav} href={`/event/${uniqueName}/${nav.key}`}>{nav.name}</Link></li>)}</ul>
     </div>}
 </div>
+
 export default Header

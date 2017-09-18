@@ -7,9 +7,16 @@ import OfflinePlugin from 'offline-plugin'
 import path from 'path'
 const ENV = process.env.NODE_ENV || 'development'
 
-const hostname = 'localhost'
+//      'SERVICE_URL': JSON.stringify('https://azai.synology.me:8080')
+let protocol = 'https'
+let hostname = 'azai.synology.me'
 const port = '8080'
 const CSS_MAPS = ENV !== 'production'
+
+if (ENV === 'development') {
+  protocol = 'http'
+  hostname = 'localhost'
+}
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -128,7 +135,7 @@ module.exports = {
   },
   plugins: ([
     new webpack.DefinePlugin({
-      'SERVICE_URL': JSON.stringify('https://azai.synology.me:8080')
+      'SERVICE_URL': JSON.stringify(protocol + '://' + hostname + ':8080')
     }),
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({
