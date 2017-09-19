@@ -3,7 +3,6 @@ import { Router } from 'preact-router'
 import 'preact/devtools'
 import Eventlist from './EventList'
 import Event from './Event'
-import Header from './Header'
 
 export default class App extends Component {
   handleRoute = (e) => {
@@ -14,8 +13,8 @@ export default class App extends Component {
     return (
       <div id='app'>
         <Router onChange={this.handleRoute}>
-          <Eventlist path='/' Header={Header} />
-          <Event path='/event/:uniqueName/:tab' Header={Header} />
+          <Eventlist path='/' />
+          <Event path='/event/:uniqueName/:tab' />
         </Router>
       </div>
     )

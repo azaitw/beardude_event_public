@@ -3,6 +3,7 @@ import { h, Component } from 'preact'
 import io from 'socket.io-client'
 import YouTubePlayer from 'youtube-player'
 import { route } from 'preact-router'
+import Header from '../Header'
 import processData from './processData'
 import css from './style.css'
 
@@ -254,7 +255,7 @@ class Event extends Component {
 
     return <div class={css.wrap}>
       <div class={this.isMobile ? css.mobileWrap : css.desktopWrap}>
-        <this.props.Header name={event.nameCht} uniqueName={event.uniqueName} navs={navs} />
+        <Header name={event.nameCht} uniqueName={event.uniqueName} navs={navs} />
         <div class={css.mainBody} style={{minHeight: bgVideoHeight}}>
           <div class={css[matches.tab]}>
             <div class={css.bgVideo}>

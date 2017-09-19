@@ -2,6 +2,7 @@
 import { h, Component } from 'preact'
 import css from './style.css'
 import { Link } from 'preact-router'
+import Header from '../Header'
 
 class EventList extends Component {
   constructor () {
@@ -21,7 +22,7 @@ class EventList extends Component {
   render () {
     return (
       <div className={css.wrap}>
-        <this.props.Header />
+        <Header />
         <div className={css.mainBody}>
           <ul className={css.iconView}>
             {this.state.events.length > 0 && this.state.events.map(raceEvent =>
