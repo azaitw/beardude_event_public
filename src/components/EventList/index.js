@@ -2,7 +2,7 @@
 import { h, Component } from 'preact'
 import css from './style.css'
 import { Link } from 'preact-router'
-import Header from '../Header/index'
+import Header from '../Header'
 
 class EventList extends Component {
   constructor () {
