@@ -3,7 +3,7 @@ import { h, Component } from 'preact'
 import io from 'socket.io-client'
 import YouTubePlayer from 'youtube-player'
 import { route } from 'preact-router'
-import Header from '../Header/index'
+import Header from '../Header/index.js'
 import processData from './processData'
 import css from './style.css'
 
