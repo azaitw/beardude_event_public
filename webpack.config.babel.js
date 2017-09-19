@@ -5,7 +5,6 @@ import autoprefixer from 'autoprefixer'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 import OfflinePlugin from 'offline-plugin'
 import path from 'path'
-import fs from 'fs'
 const ENV = process.env.NODE_ENV || 'development'
 
 //      'SERVICE_URL': JSON.stringify('https://azai.synology.me:8080')
@@ -17,12 +16,6 @@ const CSS_MAPS = ENV !== 'production'
 if (ENV === 'development') {
   protocol = 'http'
   hostname = 'localhost'
-}
-
-const browserBabelCfg = () => {
-  const babelCfg = JSON.parse(fs.readFileSync('./.babelrc', 'utf8'))
-  babelCfg.babelrc = false
-  return babelCfg
 }
 
 module.exports = {
@@ -71,12 +64,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: browserBabelCfg()
-          }
-        ]
+        use: 'babel-loader'
       },
       {
         // Transform our own .(less|css) files with PostCSS and CSS-modules
