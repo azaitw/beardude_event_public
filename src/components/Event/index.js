@@ -59,7 +59,7 @@ const render = {
     </table>
   }
 }
-const returnLineBreakText = (text) => text.split('\n').map(item => <p>{item}</p>)
+const returnLineBreakText = (text) => (text) ? text.split('\n').map(item => <p>{item}</p>) : text
 
 class Event extends Component {
   _bind (...methods) { methods.forEach((method) => { if (this[method]) { this[method] = this[method].bind(this) } }) }
@@ -266,7 +266,7 @@ class Event extends Component {
               {bgVideo}
             </div>
             {home}
-            <div class={css.rulesTab}>{returnLineBreakText(event.rules)}</div>
+            {event.rules && <div class={css.rulesTab}>{returnLineBreakText(event.rules)}</div>}
             {register}
             {live}
           </div>
