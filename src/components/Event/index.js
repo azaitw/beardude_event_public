@@ -108,7 +108,7 @@ class Event extends Component {
   }
   componentDidMount () {
     const getEvent = async (successCallback) => {
-      const response = await fetch(`${SERVICE_URL}/api/event/info/${this.props.matches.uniqueName}`, {credentials: 'same-origin'})
+      const response = await fetch(`${SERVICE_URL}/api/event/info/${this.props.matches.uniqueName}`, {credentials: 'include'})
       const res = await response.json()
 
       if (response.status === 200) {
@@ -190,7 +190,7 @@ class Event extends Component {
   }
   socketIoEvents (callback) {
     this.socketio.on('connect', function () {
-      fetch(`/api/socket/info?sid=${this.socketio.id}`, {credentials: 'same-origin'}).then(V => { if (callback !== undefined) { callback() } })
+      fetch(`/api/socket/info?sid=${this.socketio.id}`, {credentials: 'include'}).then(V => { if (callback !== undefined) { callback() } })
     }.bind(this))
     this.socketio.on('eventlatencyupdate', function (data) {
       this.setState({ event: {...this.state.event, resultLatency: data.event.resultLatency} })
@@ -224,7 +224,7 @@ class Event extends Component {
       </div>
       <div class={css.credit}><a target='_blank' href='https://www.youtube.com/channel/UCgqJcN37au-Qa9HJ98c20CQ'>Video by Kadacha &copy; 2017</a></div>
     </span>
-    let bgVideo = <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={bgVideoHeight} src={`${event.promoVideo}${youtubeBasicParams}&loop=1`} frameborder='0' allowfullscreen />
+    let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={bgVideoHeight} src={`${event.promoVideo}${youtubeBasicParams}&loop=1`} frameborder='0' allowfullscreen /> : ''
     let home = ''
     let register = ''
     let live = ''
