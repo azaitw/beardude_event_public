@@ -109,9 +109,8 @@ class Event extends Component {
   componentDidMount () {
     const getEvent = async (successCallback) => {
       const response = await fetch(`${SERVICE_URL}/api/event/info/${this.props.matches.uniqueName}`, {credentials: 'include'})
-      const res = await response.json()
-
       if (response.status === 200) {
+        const res = await response.json()
         let deferredTimes = []
         // 檢查有無延遲期間更新的資料, client第一次開啟頁面時做計算
         const races = res.races.map((V, I) => {
