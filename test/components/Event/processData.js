@@ -123,9 +123,9 @@ describe('/ducks/processData.returnSortedResult', () => {
       'e00000000000000000000002': [1506492248000, 1506492268000, 1506492288000, 1506492307000, 1506492325000],
       'e00000000000000000000003': [1506492249000, 1506492269000, 1506492289000, 1506492307000] }
     expect(processData.returnSortedResult(race, regs)).toEqual([
-      { epc: regs[1].epc, registration: regs[1].id, raceNumber: regs[1].raceNumber, lastValidRecord: 1506492325000, lapsCompleted: 4, record: race.recordsHashTable[regs[1].epc]},
-      { epc: regs[0].epc, registration: regs[0].id, raceNumber: regs[0].raceNumber, lastValidRecord: 1506492337000, lapsCompleted: 4, record: race.recordsHashTable[regs[0].epc]},
-      { epc: regs[2].epc, registration: regs[2].id, raceNumber: regs[2].raceNumber, lastValidRecord: 1506492307000, lapsCompleted: 3, record: race.recordsHashTable[regs[2].epc]}
+      { epc: regs[1].epc, registration: regs[1].id, raceNumber: regs[1].raceNumber, lastValidRecord: 1506492325000, lapsCompleted: 4, record: race.recordsHashTable[regs[1].epc] },
+      { epc: regs[0].epc, registration: regs[0].id, raceNumber: regs[0].raceNumber, lastValidRecord: 1506492337000, lapsCompleted: 4, record: race.recordsHashTable[regs[0].epc] },
+      { epc: regs[2].epc, registration: regs[2].id, raceNumber: regs[2].raceNumber, lastValidRecord: 1506492307000, lapsCompleted: 3, record: race.recordsHashTable[regs[2].epc] }
     ])
   })
   it('should return sorted race result', () => {
@@ -134,9 +134,9 @@ describe('/ducks/processData.returnSortedResult', () => {
       'e00000000000000000000002': [1506492248000, 1506492268000, 1506492288000],
       'e00000000000000000000003': [1506492249000, 1506492269000, 1506492289000] }
     expect(processData.returnSortedResult(race, regs)).toEqual([
-      { epc: regs[0].epc, registration: regs[0].id, raceNumber: regs[0].raceNumber, lastValidRecord: 1506492287000, lapsCompleted: 2, record: race.recordsHashTable[regs[0].epc]},
-      { epc: regs[1].epc, registration: regs[1].id, raceNumber: regs[1].raceNumber, lastValidRecord: 1506492288000, lapsCompleted: 2, record: race.recordsHashTable[regs[1].epc]},
-      { epc: regs[2].epc, registration: regs[2].id, raceNumber: regs[2].raceNumber, lastValidRecord: 1506492289000, lapsCompleted: 2, record: race.recordsHashTable[regs[2].epc]}
+      { epc: regs[0].epc, registration: regs[0].id, raceNumber: regs[0].raceNumber, lastValidRecord: 1506492287000, lapsCompleted: 2, record: race.recordsHashTable[regs[0].epc] },
+      { epc: regs[1].epc, registration: regs[1].id, raceNumber: regs[1].raceNumber, lastValidRecord: 1506492288000, lapsCompleted: 2, record: race.recordsHashTable[regs[1].epc] },
+      { epc: regs[2].epc, registration: regs[2].id, raceNumber: regs[2].raceNumber, lastValidRecord: 1506492289000, lapsCompleted: 2, record: race.recordsHashTable[regs[2].epc] }
     ])
   })
   it('should return sorted race result', () => {
@@ -147,10 +147,10 @@ describe('/ducks/processData.returnSortedResult', () => {
       'e00000000000000000000002': [1506492248000, 1506492268000],
       'e00000000000000000000003': [1506492249000, 1506492269000, 1506492289000] }
     expect(processData.returnSortedResult(race, regs)).toEqual([
-      { epc: regs[0].epc, registration: regs[0].id, raceNumber: regs[0].raceNumber, lastValidRecord: 1506492287000, lapsCompleted: 2, record: race.recordsHashTable[regs[0].epc]},
-      { epc: regs[2].epc, registration: regs[2].id, raceNumber: regs[2].raceNumber, lastValidRecord: 1506492289000, lapsCompleted: 2, record: race.recordsHashTable[regs[2].epc]},
-      { epc: regs[1].epc, registration: regs[1].id, raceNumber: regs[1].raceNumber, lastValidRecord: 1506492268000, lapsCompleted: 1, record: race.recordsHashTable[regs[1].epc]},
-      { epc: regs[3].epc, registration: regs[3].id, raceNumber: regs[3].raceNumber, lapsCompleted: 0, record: []}
+      { epc: regs[0].epc, registration: regs[0].id, raceNumber: regs[0].raceNumber, lastValidRecord: 1506492287000, lapsCompleted: 2, record: race.recordsHashTable[regs[0].epc] },
+      { epc: regs[2].epc, registration: regs[2].id, raceNumber: regs[2].raceNumber, lastValidRecord: 1506492289000, lapsCompleted: 2, record: race.recordsHashTable[regs[2].epc] },
+      { epc: regs[1].epc, registration: regs[1].id, raceNumber: regs[1].raceNumber, lastValidRecord: 1506492268000, lapsCompleted: 1, record: race.recordsHashTable[regs[1].epc] },
+      { epc: regs[3].epc, registration: regs[3].id, raceNumber: regs[3].raceNumber, lapsCompleted: 0, record: [] }
     ])
   })
   it('should return empty result if no matched regs in race', () => {
@@ -209,7 +209,9 @@ describe('/ducks/processData.returnRaceWithTrimmedResult', () => {
       { id: 3, lapRecords: ['0:22.00', '0:20.00', '0:20.00', '0:22.00'] }
     ]
     expect(processData.returnRaceWithTrimmedResult(race)).toEqual({
-      id: '123', laps: 3, result: [
+      id: '123',
+      laps: 3,
+      result: [
         { id: 1, lapRecords: ['0:20.00', '0:21.00', '0:25.00'] },
         { id: 2, lapRecords: ['0:30.00', '0:31.00'] },
         { id: 3, lapRecords: ['0:22.00', '0:20.00', '0:20.00'] }
@@ -223,7 +225,9 @@ describe('/ducks/processData.returnRaceWithTrimmedResult', () => {
       { id: 3, lapRecords: ['0:22.00', '0:20.00'] }
     ]
     expect(processData.returnRaceWithTrimmedResult(race)).toEqual({
-      id: '123', laps: 3, result: [
+      id: '123',
+      laps: 3,
+      result: [
         { id: 1, lapRecords: ['0:20.00'] },
         { id: 2, lapRecords: [] },
         { id: 3, lapRecords: ['0:22.00', '0:20.00'] }
@@ -237,7 +241,9 @@ describe('/ducks/processData.returnRaceWithTrimmedResult', () => {
       { id: 3, lapRecords: ['0:22.00', '0:20.00', '0:20.00', '0:22.00'] }
     ]
     expect(processData.returnRaceWithTrimmedResult(race)).toEqual({
-      id: '123', laps: 3, result: [
+      id: '123',
+      laps: 3,
+      result: [
         { id: 1, lapRecords: ['0:20.00', '0:21.00', '0:25.00'] },
         { id: 2, lapRecords: ['0:30.00', '0:31.00', '0:33.00'] },
         { id: 3, lapRecords: ['0:22.00', '0:20.00', '0:20.00'] }
@@ -246,11 +252,14 @@ describe('/ducks/processData.returnRaceWithTrimmedResult', () => {
   })
 })
 describe('/ducks/processData.returnRaceResultSubmitArray', () => {
-  let race = { id: '1', laps: 3, result: [
-    { registration: 1, lapRecords: ['0:20.00', '0:21.00', '0:25.00'], advanceTo: '3' },
-    { registration: 2, lapRecords: ['0:30.00', '0:31.00', '0:33.00'] },
-    { registration: 3, lapRecords: ['0:22.00', '0:20.00', '0:20.00'] }
-  ]}
+  let race = {
+    id: '1',
+    laps: 3,
+    result: [
+      { registration: 1, lapRecords: ['0:20.00', '0:21.00', '0:25.00'], advanceTo: '3' },
+      { registration: 2, lapRecords: ['0:30.00', '0:31.00', '0:33.00'] },
+      { registration: 3, lapRecords: ['0:22.00', '0:20.00', '0:20.00'] }
+    ]}
   const races = [{ id: '1', laps: 3, registrationIds: [1, 2, 3] }, { id: '2', laps: 3, registrationIds: [4, 5, 6] }, { id: '3', laps: 3, registrationIds: [4] }]
   it('should return an array of race objects to update', () => {
     const actual = processData.returnRaceResultSubmitArray(race, races)
@@ -287,9 +296,9 @@ describe('/ducks/processData.returnDeferredHashTable', () => {
   }
   it('should return result within latency', () => {
     expect(processData.returnDeferredHashTable(hashTable, latency)).toEqual({
-    'e00000000000000000000001': [now - 100000, now - 20000],
-    'e00000000000000000000002': [now - 100000, now - 19000],
-    'e00000000000000000000003': [now - 100000, now - 18000, now - 10100]
+      'e00000000000000000000001': [now - 100000, now - 20000],
+      'e00000000000000000000002': [now - 100000, now - 19000],
+      'e00000000000000000000003': [now - 100000, now - 18000, now - 10100]
     })
   })
 })

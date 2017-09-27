@@ -13,8 +13,7 @@ const processData = {
   // 建立group及race 名稱hashTable會用到
   returnIdNameMap: (objs) => {
     let result = {}
-    if (objs && objs.length > 0) { objs.map(obj => {
-      if (obj.nameCht && obj.nameCht !== '') { result[obj.id] = obj.nameCht } else { result[obj.id] = obj.name } }) }
+    if (objs && objs.length > 0) { objs.map(obj => { if (obj.nameCht && obj.nameCht !== '') { result[obj.id] = obj.nameCht } else { result[obj.id] = obj.name } }) }
     return result
   },
   // 建立選手名稱 hashTable
