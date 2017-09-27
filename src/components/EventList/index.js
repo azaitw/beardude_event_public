@@ -26,7 +26,7 @@ class EventList extends Component {
         <div className={css.mainBody}>
           <ul className={css.iconView}>
             {this.state.events.length > 0 && this.state.events.map(raceEvent =>
-              <li key={'event-' + raceEvent.id}><Link class={css.bigIcon} href={`/event/${raceEvent.uniqueName}/home`}>{raceEvent.nameCht}</Link></li>
+              <li key={'event-' + raceEvent.id}><Link class={css.bigIcon} href={`/event/${raceEvent.uniqueName}`}>{raceEvent.nameCht}</Link></li>
             )}
           </ul>
         </div>

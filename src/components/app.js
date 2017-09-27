@@ -15,6 +15,7 @@ export default class App extends Component {
         <Router onChange={this.handleRoute}>
           <Eventlist path='/' />
           <Event path='/event/:uniqueName/:tab' />
+          <Event path='/event/:uniqueName' />
         </Router>
       </div>
     )
