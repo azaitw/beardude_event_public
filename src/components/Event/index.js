@@ -177,14 +177,10 @@ class Event extends Component {
   updateBroadcastStatus () {
     const now = Date.now()
     const postRaceWaitMS = 21600000 // 6 hours
-    let result = 'ended'
-    if (now < this.state.event.startTime) {
-      result = 'init'
-    } else if (this.state.event.startTime >= now && now < this.state.event.streamingStart) {
-      result = 'started'
-    } else if (now >= this.state.event.streamingStart && now < (this.state.event.endTime + postRaceWaitMS)) {
-      result = 'live'
-    }
+    let result = 'init'
+    if (now >= this.state.event.startTime) { result = 'started' }
+    if (now >= this.state.event.streamingStart) { result = 'live' }
+    if (now >= (this.state.event.endTime + postRaceWaitMS)) { result = 'ended' }
     this.setState({broadcastStatus: result})
   }
   socketIoEvents (callback) {
