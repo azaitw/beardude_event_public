@@ -23,7 +23,8 @@
   position: relative;
   z-index: 5;
 }
-.rulesTab {
+.rulesTab,
+.registerTab {
   padding: 20px 30px;
   line-height: 32px;
 }
