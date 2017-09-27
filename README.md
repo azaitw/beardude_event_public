@@ -1,4 +1,4 @@
-# Beardude Event Public (preact ver.) [![Build Status](http://azai.synology.me:33333/buildStatus/icon?job=Beardude Event Public)](http://azai.synology.me:33333/job/Beardude%20Event%20Public/)
+# Beardude Event Public (preact ver.) [![Build Status](http://azai.synology.me:33333/job/Beardude%20Event%20Public/badge/icon)](http://azai.synology.me:33333/job/Beardude%20Event%20Public/)
 
 
 ## Development Workflow
