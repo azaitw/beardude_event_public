@@ -256,7 +256,7 @@ class Event extends Component {
       <div class={this.isMobile ? css.mobileWrap : css.desktopWrap}>
         <Header name={event.nameCht} uniqueName={event.uniqueName} navs={navs} />
         <div class={css.mainBody} style={{minHeight: bgVideoHeight}}>
-          <div class={css[(matches.tab === undefined) ? 'home' ? matches.tab]}>
+          <div class={css[(matches.tab === undefined) ? 'home' : matches.tab]}>
             <div class={css.bgVideo}>
               <div class={css.bgOverlay}>
                 {status}
