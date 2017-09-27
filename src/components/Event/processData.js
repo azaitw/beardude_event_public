@@ -1,7 +1,7 @@
 const processData = {
   // 檢查賽事可否開始 (賽事有無選手)
   canStartRace: (ongoingRace, race) => {
-    if (ongoingRace === '' && race.registrationIds.length > 0) { return true }
+    if (ongoingRace === '' && race.registrationIds && race.registrationIds.length > 0) { return true }
     return false
   },
   // 檢查賽事可否結束 (所有選手騎完圈數)
@@ -13,7 +13,8 @@ const processData = {
   // 建立group及race 名稱hashTable會用到
   returnIdNameMap: (objs) => {
     let result = {}
-    if (objs && objs.length > 0) { objs.map(obj => { result[obj.id] = obj.nameCht }) }
+    if (objs && objs.length > 0) { objs.map(obj => {
+      if (obj.nameCht && obj.nameCht !== '') { result[obj.id] = obj.nameCht } else { result[obj.id] = obj.name } }) }
     return result
   },
   // 建立選手名稱 hashTable
@@ -60,14 +61,11 @@ const processData = {
   },
   // 移動array item的位置. 用來調整比賽順序及選手名次等
   returnMovedArray: (arr, oldIndex, newIndex) => {
-    while (oldIndex < 0) { oldIndex += arr.length }
-    while (newIndex < 0) { newIndex += arr.length }
-    if (newIndex >= arr.length) {
-      let k = newIndex - arr.length
-      while ((k--) + 1) { arr.push(undefined) }
-    }
-    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0])
-    return arr
+    if (oldIndex >= arr.length || newIndex >= arr.length) { return arr }
+    let output = arr
+    const moving = output.splice(oldIndex, 1)[0]
+    output.splice(newIndex, 0, moving)
+    return output
   },
   // 回傳進行中的比賽的index
   returnOngoingRace: (ongoingRaceId, orderedRaces) => {
@@ -75,9 +73,7 @@ const processData = {
     for (let i = 0; i < orderedRaces.length; i += 1) { if (orderedRaces[i].id === ongoingRaceId) { return i } }
     return ''
   },
-  // 將 race.recordsHashTable parse成race.result. 並依成績做排序
-  returnRaceResult: (race, regs) => {
-    if (race.result.length > 0) { return race.result }
+  returnSortedResult: (race, regs) => {
     let sortTable = []
     let incomplete = []
     let notStarted = []
@@ -87,24 +83,42 @@ const processData = {
       const reg = regs.filter(V => (V.id === regId))[0]
       if (reg) {
         const record = race.recordsHashTable[reg.epc]
-        if (record) {
-          if (record[lastRecordIndex]) {
-            sortTable.push([reg.epc, reg.id, reg.raceNumber, record[lastRecordIndex], record.length - 1, record])
-          } else {
-            incomplete.push([reg.epc, reg.id, reg.raceNumber, record[record.length - 1], record.length - 1, record])
+        let obj = { epc: reg.epc, registration: reg.id, raceNumber: reg.raceNumber, lapsCompleted: 0, record: [] }
+        if (record) { // has epc record
+          obj.lapsCompleted = record.length - 1
+          obj.record = record
+          if (record[lastRecordIndex]) { // 1. completed race
+            obj.lastValidRecord = record[lastRecordIndex]
+            sortTable.push(obj)
+          } else { // 2. not complete
+            obj.lastValidRecord = record[record.length - 1]
+            incomplete.push(obj)
           }
-        } else {
-          notStarted.push([reg.epc, reg.id, reg.raceNumber, 0, 0, [], reg.id])
+        } else { // 3. no epc record
+          notStarted.push(obj)
         }
       }
     })
-    sortTable.sort((a, b) => a[3] - b[3]) // sort completed racer by last lap record
-    incomplete.sort((a, b) => b[4] - a[4]) // sort incompleted by laps
-    incomplete.sort((a, b) => (a[4] === b[4]) ? a[3] - b[3] : 0) // sort incompleted same-lap by time
-    notStarted.sort((a, b) => a[2] - b[2]) // sort notStart by raceNumber
+    sortTable.sort((a, b) => a.lastValidRecord - b.lastValidRecord) // sort completed racer by last lap record
+    incomplete.sort((a, b) => b.lapsCompleted - a.lapsCompleted) // sort incompleted by laps
+    incomplete.sort((a, b) => (a.lapsCompleted === b.lapsCompleted) ? a.lastValidRecord - b.lastValidRecord : 0) // sort incompleted same-lap by time
+    notStarted.sort((a, b) => a.raceNumber - b.raceNumber) // sort notStart by raceNumber
     sortTable = sortTable.concat(incomplete).concat(notStarted)
-    // sortTable: [epc, name, raceNumber, timestamp, laps, record]
-    return sortTable.map((item, index) => ({ epc: item[0], registration: item[1], sum: (item[3]) ? processData.returnFormattedTime(item[3] - race.startTime) : '-', laps: item[4], lapRecords: processData.returnLapRecord(item[5], race.laps, race.startTime, race.raceStatus), advanceTo: processData.returnAdvanceToId(index, race.advancingRules) }))
+    // output: { epc, id, raceNumber, lastValidRecord, lapsCompleted, record }
+    return sortTable
+  },
+  // 將 race.recordsHashTable parse成race.result. 並依成績做排序
+  returnRaceResult: (race, regs) => {
+    if (race.result.length > 0) { return race.result }
+    const sortTable = processData.returnSortedResult(race, regs)
+    return sortTable.map((item, index) => ({
+      epc: item.epc,
+      registration: item.registration,
+      sum: (item.lastValidRecord) ? processData.returnFormattedTime(item.lastValidRecord - race.startTime) : '-',
+      laps: item.lapsCompleted,
+      lapRecords: processData.returnLapRecord(item.record, race.laps, race.startTime, race.raceStatus),
+      advanceTo: processData.returnAdvanceToId(index, race.advancingRules)
+    }))
   },
   // 送出成績時, 把超過設定圈數的多餘資料刪掉
   returnRaceWithTrimmedResult: (race) => {
@@ -140,7 +154,7 @@ const processData = {
   // 回傳UI要選取的比賽的index, 依先後順序: 進行中 / 剛完成 / 尚未開始
   returnSelectedRace: (orderedRaces, ongoingRace) => {
     if (ongoingRace) { return ongoingRace }
-    const selectedRaceStatusByOrder = ['started', 'ended', 'init']
+    const selectedRaceStatusByOrder = ['started', 'init', 'ended']
     for (let i = 0; i < selectedRaceStatusByOrder.length; i += 1) {
       for (let j = 0; j < orderedRaces.length; j += 1) {
         if (orderedRaces[j].raceStatus === selectedRaceStatusByOrder[i]) { return j }
@@ -166,7 +180,7 @@ const processData = {
     for (let i in orgHashTable) {
       let updateCount = orgHashTable[i].length - trimmedHashTable[i].length
       for (let j = 0; j < updateCount; j += 1) {
-        deferredTimes.push((latency + now) - orgHashTable[i][orgHashTable[i].length - 1 - j])
+        deferredTimes.push(latency - (now - orgHashTable[i][orgHashTable[i].length - 1 - j]))
       }
     }
     return deferredTimes
@@ -185,6 +199,8 @@ const processData = {
     order.map(raceId => { races.map(race => { if (race.id === raceId) { result.push(race) } }) })
     return result
   },
+
+  // Only for public
   returnDate: (ts) => {
     const diff = 28800000 // diff between taipei and utc in ms
     const obj = new Date(ts + diff)
