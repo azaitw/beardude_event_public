@@ -232,8 +232,8 @@ class Event extends Component {
 
     switch (broadcastStatus) {
       case 'init':
-        //navs.push({key: 'register', name: '報名'})
-        //register = <div class={css.registerTab}>報名</div>
+        // navs.push({key: 'register', name: '報名'})
+        // register = <div class={css.registerTab}>報名</div>
         break
       case 'started':
         home = <div class={css.homeTab}>{render.dashboard.main({nameTables, groups, races, raceSelected, handleSelect: this.handleSelect})}</div>
