@@ -9,6 +9,7 @@ const ENV = process.env.NODE_ENV || 'development'
 
 //      'SERVICE_URL': JSON.stringify('https://azai.synology.me:8080')
 let hostname = 'localhost'
+let port = '8080'
 const CSS_MAPS = ENV !== 'production'
 
 module.exports = {
