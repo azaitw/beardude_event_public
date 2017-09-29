@@ -12,8 +12,8 @@ class EventList extends Component {
   componentDidMount () {
     const getEvents = async () => {
       const response = await fetch('/api/event/getEvents', {credentials: 'include'})
-      const res = await response.json()
       if (response.status === 200) {
+        const res = await response.json()
         this.setState({events: res.events})
       }
     }
