@@ -1,4 +1,4 @@
-/* global fetch, SERVICE_URL */
+/* global fetch */
 import { h, Component } from 'preact'
 import css from './style.css'
 import { Link } from 'preact-router'
@@ -11,7 +11,7 @@ class EventList extends Component {
   }
   componentDidMount () {
     const getEvents = async () => {
-      const response = await fetch(`${SERVICE_URL}/api/event/getEvents`, {credentials: 'include'})
+      const response = await fetch('/api/event/getEvents', {credentials: 'include'})
       const res = await response.json()
       if (response.status === 200) {
         this.setState({events: res.events})

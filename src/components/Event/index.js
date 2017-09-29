@@ -1,4 +1,4 @@
-/* global fetch, SERVICE_URL */
+/* global fetch */
 import { h, Component } from 'preact'
 import io from 'socket.io-client'
 import YouTubePlayer from 'youtube-player'
@@ -108,7 +108,7 @@ class Event extends Component {
   }
   componentDidMount () {
     const getEvent = async (successCallback) => {
-      const response = await fetch(`${SERVICE_URL}/api/event/info/${this.props.matches.uniqueName}`, {credentials: 'include'})
+      const response = await fetch(`/api/event/info/${this.props.matches.uniqueName}`, {credentials: 'include'})
       if (response.status === 200) {
         const res = await response.json()
         let deferredTimes = []
@@ -152,7 +152,7 @@ class Event extends Component {
       document.title = this.state.event.nameCht
     }
     if (!this.props.matches.uniqueName) { return route('/') }
-    this.socketio = io(SERVICE_URL)
+    this.socketio = io(window.location.origin)
     window.addEventListener('resize', this.setIframeHeight)
     getEvent(onSuccess)
   }
@@ -209,7 +209,7 @@ class Event extends Component {
   }
   render ({matches}, {event, groups, races, nameTables, raceSelected, streamHeight, bgVideoHeight, broadcastStatus}) {
     if (!event) { return <div class={css.wrap}><div class={css.loading}>Loading...</div></div> }
-    const youtubeBasicParams = '?rel=0&controls=0&modestbranding=1&enablejsapi=1&autoplay=1&hd=1&autohide=1&showinfo=0'
+    const youtubeBasicParams = '?rel=0&controls=0&modestbranding=1&enablejsapi=1&autoplay=1&hd=1&autohide=1&showinfo=0&playsinline=1'
     const stream = <iframe id='streamVideo' ref={c => (this.streamVideo = c)} class={css.stream} width='100%' height={streamHeight} src={`${event.streamingIframe}${youtubeBasicParams}`} frameborder='0' allowfullscreen />
     let bgOverlay = <span>
       <div class={css.info}>
