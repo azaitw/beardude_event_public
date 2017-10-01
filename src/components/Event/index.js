@@ -150,6 +150,7 @@ class Event extends Component {
         this.isMobile = true
       }
       document.title = this.state.event.nameCht
+      document.description = event.location + ' ' + processData.returnDate(event.startTime) + ' ' + processData.returnTime(event.startTime)
     }
     if (!this.props.matches.uniqueName) { return route('/') }
     this.socketio = io(window.location.origin)
