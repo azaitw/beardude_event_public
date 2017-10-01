@@ -135,6 +135,7 @@ class Event extends Component {
       return route('/')
     }
     const onSuccess = () => {
+      const event = this.state.event
       this.socketIoEvents()
       this.updateOngoingRaces(true)
       this.setIframeHeight()
@@ -149,7 +150,7 @@ class Event extends Component {
       if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
         this.isMobile = true
       }
-      document.title = this.state.event.nameCht
+      document.title = event.nameCht
       document.description = event.location + ' ' + processData.returnDate(event.startTime) + ' ' + processData.returnTime(event.startTime)
     }
     if (!this.props.matches.uniqueName) { return route('/') }
