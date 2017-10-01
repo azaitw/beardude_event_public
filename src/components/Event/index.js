@@ -154,7 +154,7 @@ class Event extends Component {
       const info = event.name + ' - ' + event.location + ' ' + processData.returnDate(event.startTime) + ' ' + processData.returnTime(event.startTime)
       document.description = info
       document.querySelector('meta[property=\'og:title\']').content = event.nameCht
-      document.querySelector('meta[property=\'description\']').content = info
+      document.querySelector('meta[name=\'description\']').content = info
       document.querySelector('meta[property=\'og:description\']').content = info
     }
     if (!this.props.matches.uniqueName) { return route('/') }
