@@ -151,7 +151,10 @@ class Event extends Component {
         this.isMobile = true
       }
       document.title = event.nameCht
-      document.description = event.location + ' ' + processData.returnDate(event.startTime) + ' ' + processData.returnTime(event.startTime)
+      const info = event.name + ' - ' + event.location + ' ' + processData.returnDate(event.startTime) + ' ' + processData.returnTime(event.startTime)
+      document.description = info
+      document.querySelector('meta[property=\'og:title\']').content = event.nameCht
+      document.querySelector('meta[property=\'og:description\']').content = info
     }
     if (!this.props.matches.uniqueName) { return route('/') }
     this.socketio = io(window.location.origin)
