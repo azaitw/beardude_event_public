@@ -1,7 +1,8 @@
 /* global fetch */
 import { h, Component } from 'preact'
 import css from './style.css'
-import { Link, route } from 'preact-router'
+// import { Link, route } from 'preact-router'
+import { Link } from 'preact-router'
 import Header from '../Header/index'
 
 class EventList extends Component {
