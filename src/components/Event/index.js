@@ -21,7 +21,7 @@ const render = {
     main: ({groups, races, raceSelected, nameTables, handleSelect}) => {
       const race = races[raceSelected]
       const nav = <ul class={css.raceSelector}>{races.map((race, index) => render.raceList({ race, index, raceSelected, groupNames: (groups.length > 1) ? nameTables.group : undefined, handleSelect }))}</ul>
-      if (race && race.registrationIds.length === 0) { return <span>{nav}<div class={css.noData}>比賽尚未開始</div></span> }
+      if (race && race.registrationIds.length === 0) { return <span>{nav}<div class={css.noData}>尚無比賽資料</div></span> }
       return <span>{nav}
         <div class={css.managerList}>
           <div class={css.dashId}>{render.dashboard.labels(race, nameTables)}</div>
@@ -215,8 +215,9 @@ class Event extends Component {
   }
   render ({matches}, {event, groups, races, nameTables, raceSelected, streamHeight, bgVideoHeight, broadcastStatus}) {
     if (!event) { return <div class={css.wrap}><div class={css.loading}>Loading...</div></div> }
+    const navs = [{key: 'live', name: '實況'}, {key: 'rules', name: '規則'}, {key: 'register', name: '報名'}]
     const youtubeBasicParams = '?rel=0&controls=0&modestbranding=1&enablejsapi=1&autoplay=1&hd=1&autohide=1&showinfo=0&playsinline=1'
-    const stream = <iframe id='streamVideo' ref={c => (this.streamVideo = c)} class={css.stream} width='100%' height={streamHeight} src={`${event.streamingIframe}${youtubeBasicParams}`} frameborder='0' allowfullscreen />
+    let stream = (event.streamingIframe && event.streamingIframe !== '') ? <iframe id='streamVideo' ref={c => (this.streamVideo = c)} class={css.stream} width='100%' height={streamHeight} src={`${event.streamingIframe}${youtubeBasicParams}`} frameborder='0' allowfullscreen /> : ''
     let bgOverlay = <span>
       <div class={css.info}>
         <div class={css.location}>{event.location}</div>
@@ -226,52 +227,37 @@ class Event extends Component {
       <div class={css.credit}><a target='_blank' href='https://www.youtube.com/channel/UCgqJcN37au-Qa9HJ98c20CQ'>Video by Kadacha &copy; 2017</a></div>
     </span>
     let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={bgVideoHeight} src={`${event.promoVideo}${youtubeBasicParams}&loop=1`} frameborder='0' allowfullscreen /> : <div id='bgVideo' width='100%' height={bgVideoHeight} />
-    let home = ''
-    let register = ''
-    let live = ''
-    let navs = [{key: 'rules', name: '規則'}]
-    let status = ''
-
-    switch (broadcastStatus) {
-      case 'init':
-        if (event.registerDesc && event.registerDesc !== '') {
-          navs.push({key: 'register', name: '報名'})
-          register = <div class={css.registerTab}>{returnLineBreakText(event.registerDesc)}</div>
-        }
-        break
-      case 'started':
-        home = <div class={css.homeTab}>{render.dashboard.main({nameTables, groups, races, raceSelected, handleSelect: this.handleSelect})}</div>
-        status = <div class={css.status}>比賽進行中</div>
-        break
-      case 'live':
-        bgVideo = stream
-        home = <div class={css.homeTab}>
-          <p>{event.location} {processData.returnDate(event.startTime)} {processData.returnTime(event.startTime)} -</p>
-          {render.dashboard.main({nameTables, groups, races, raceSelected, handleSelect: this.handleSelect})}
-        </div>
-        bgOverlay = ''
-        break
-      default:
-        navs.unshift({key: 'live', name: '實況'})
-        live = <div class={css.liveTab}>{stream}{render.dashboard.main({nameTables, groups, races, raceSelected, handleSelect: this.handleSelect})}</div>
+    let overlayText = ''
+    if (broadcastStatus === 'init') {
+      overlayText = <div class={css.status}>成績將即時更新，決賽直播{processData.returnTime(event.streamingStart)}開始</div>
+      stream = ''
+    } else if (broadcastStatus === 'started') {
+      overlayText = <div class={css.statusLive}>比賽進行中，預計 {processData.returnTime(event.streamingStart)} 開始轉播</div>
+      stream = ''
+    } else if (broadcastStatus === 'live') {
+      bgVideo = stream
+      bgOverlay = ''
     }
-
+    /*
+      時間 / tab
+                home          live            rules           register
+      init:     bgV           bgV+txt+board   bgV+rules       bgV+reg
+      started:  bgV+txt+board bgV+txt+board   bgV+rules       bgV+reg
+      live:     stream+board  stream+board    stream+rules    stream+reg    (bgV改成stream)
+      ended:    bgV+board     stream+board    bgV+rules       bgV+reg
+    */
     return <div class={css.wrap}>
       <div class={this.isMobile ? css.mobileWrap : css.desktopWrap}>
         <Header name={event.nameCht} uniqueName={event.uniqueName} navs={navs} />
         <div class={css.mainBody} style={{minHeight: bgVideoHeight}}>
-          <div class={css[(matches.tab === undefined) ? 'home' : matches.tab]}>
-            <div class={css.bgVideo}>
-              <div class={css.bgOverlay}>
-                {status}
-                {bgOverlay}
-              </div>
-              {bgVideo}
+          <div class={css['wrap-' + broadcastStatus]}>
+            <div class={css[(matches.tab === undefined) ? 'home' : matches.tab]}>
+              <div class={css.bgVideo}><div class={css.bgOverlay}>{overlayText}{bgOverlay}</div>{bgVideo}</div>
+              {event.rules && event.rules !== '' && <div class={css.rulesTab}>{returnLineBreakText(event.rules)}</div>}
+              {event.registerDesc && event.registerDesc !== '' && <div class={css.registerTab}>{returnLineBreakText(event.registerDesc)}</div>}
+              <div class={css.liveTab}>{stream}</div>
+              <div class={css.dashboard}>{render.dashboard.main({nameTables, groups, races, raceSelected, handleSelect: this.handleSelect})}</div>
             </div>
-            {home}
-            {event.rules && <div class={css.rulesTab}>{returnLineBreakText(event.rules)}</div>}
-            {register}
-            {live}
           </div>
         </div>
         <div class={css.footer}>
