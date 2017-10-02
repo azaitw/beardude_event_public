@@ -1,5 +1,5 @@
 {
-  "name": "Beardude Event Public",
+  "name": "Beardude_event_public",
   "version": "1.0.0",
   "description": "Beardude Event Public site, for events info, live broadcast, and results",
   "scripts": {
@@ -90,6 +90,7 @@
     "style-loader": "^0.18.1",
     "url-loader": "^0.5.8",
     "webpack": "^3.0.0",
+    "webpack-chunk-hash": "^0.4.0",
     "webpack-dev-server": "^2.4.4"
   },
   "dependencies": {

@@ -1,4 +1,5 @@
 import webpack from 'webpack'
+import WebpackChunkHash from 'webpack-chunk-hash'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import autoprefixer from 'autoprefixer'
@@ -29,7 +30,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: 'bundle.[chunkhash].js',
+    chunkFilename: 'bundle.[chunkhash].js'
   },
 
   resolve: {
@@ -120,6 +122,7 @@ module.exports = {
     ]
   },
   plugins: ([
+    new WebpackChunkHash(),
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({
       filename: 'style.css',
