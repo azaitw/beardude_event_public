@@ -1,7 +1,7 @@
 /* global fetch */
 import { h, Component } from 'preact'
 import css from './style.css'
-import { Link } from 'preact-router'
+import { Link, route } from 'preact-router'
 import Header from '../Header/index'
 
 class EventList extends Component {
@@ -14,6 +14,9 @@ class EventList extends Component {
       const response = await fetch('/api/event/getEvents', {credentials: 'include'})
       if (response.status === 200) {
         const res = await response.json()
+        if (res.events.length === 1) {
+          route(`/event/${res.events[0].uniqueName}`, true)
+        }
         this.setState({events: res.events})
       }
     }
