@@ -113,6 +113,7 @@
   font-family: Palatino;
   z-index: 10;
   opacity: 0.9;
+  text-align: left;
 }
 @keyframes dissolve {
   from { opacity: 1; background: #000; }

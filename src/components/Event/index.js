@@ -229,7 +229,7 @@ class Event extends Component {
     let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={bgVideoHeight} src={`${event.promoVideo}${youtubeBasicParams}&loop=1`} frameborder='0' allowfullscreen /> : <div id='bgVideo' width='100%' height={bgVideoHeight} />
     let overlayText = ''
     if (broadcastStatus === 'init') {
-      overlayText = <div class={css.status}>賽事成績將即時更新，決賽直播預計{processData.returnTime(event.streamingStart)}開始</div>
+      overlayText = <div class={css.status}>成績將即時更新，決賽直播{processData.returnTime(event.streamingStart)}開始</div>
       stream = ''
     } else if (broadcastStatus === 'started') {
       overlayText = <div class={css.statusLive}>比賽進行中，預計 {processData.returnTime(event.streamingStart)} 開始轉播</div>
