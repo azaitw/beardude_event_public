@@ -213,9 +213,7 @@ class Event extends Component {
   handleSelect (index) {
     return (e) => { this.setState({ raceSelected: index }) }
   }
-  render ({matches}, {event, groups, races, nameTables, raceSelected, streamHeight, bgVideoHeight}) {
-    // this is only for testing
-    const broadcastStatus = 'ended'
+  render ({matches}, {event, groups, races, nameTables, raceSelected, streamHeight, bgVideoHeight, broadcastStatus}) {
     if (!event) { return <div class={css.wrap}><div class={css.loading}>Loading...</div></div> }
     const navs = [{key: 'live', name: '實況'}, {key: 'rules', name: '規則'}, {key: 'register', name: '報名'}]
     const youtubeBasicParams = '?rel=0&controls=0&modestbranding=1&enablejsapi=1&autoplay=1&hd=1&autohide=1&showinfo=0&playsinline=1'
@@ -231,7 +229,7 @@ class Event extends Component {
     let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={bgVideoHeight} src={`${event.promoVideo}${youtubeBasicParams}&loop=1`} frameborder='0' allowfullscreen /> : <div id='bgVideo' width='100%' height={bgVideoHeight} />
     let overlayText = ''
     if (broadcastStatus === 'init') {
-      overlayText = <div class={css.status}>成績將即時更新，決賽直播約{processData.returnTime(event.streamingStart)} 開始</div>
+      overlayText = <div class={css.status}>賽事成績將即時更新，決賽直播預計{processData.returnTime(event.streamingStart)}開始</div>
       stream = ''
     } else if (broadcastStatus === 'started') {
       overlayText = <div class={css.statusLive}>比賽進行中，預計 {processData.returnTime(event.streamingStart)} 開始轉播</div>

@@ -79,7 +79,9 @@
   display: none;
 }
 .rules .dashboard,
-.register .dashboard {
+.register .dashboard,
+.rules .status,
+.register .status {
   display: none;
 }
 @keyframes pulse1 {
