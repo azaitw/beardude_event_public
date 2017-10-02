@@ -14,9 +14,7 @@ class EventList extends Component {
       const response = await fetch('/api/event/getEvents', {credentials: 'include'})
       if (response.status === 200) {
         const res = await response.json()
-        if (res.events.length === 1) {
-          route(`/event/${res.events[0].uniqueName}`, true)
-        }
+        // if (res.events.length === 1) { route(`/event/${res.events[0].uniqueName}`, true) }
         this.setState({events: res.events})
       }
     }
