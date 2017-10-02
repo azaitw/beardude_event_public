@@ -1,7 +1,7 @@
 {
-  "name": "beardudeLand",
-  "version": "6.0.0",
-  "description": "beardude cycling land",
+  "name": "Beardude Event Public",
+  "version": "1.0.0",
+  "description": "Beardude Event Public site, for events info, live broadcast, and results",
   "scripts": {
     "dev": "nodemon -e xyz --config nodemon.dev.json",
     "start": "serve build -s -c 1",
