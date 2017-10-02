@@ -21,7 +21,7 @@ const render = {
     main: ({groups, races, raceSelected, nameTables, handleSelect}) => {
       const race = races[raceSelected]
       const nav = <ul class={css.raceSelector}>{races.map((race, index) => render.raceList({ race, index, raceSelected, groupNames: (groups.length > 1) ? nameTables.group : undefined, handleSelect }))}</ul>
-      if (race && race.registrationIds.length === 0) { return <span>{nav}<div class={css.noData}>尚無比賽資料</div></span> }
+      if (!race || (race && race.registrationIds.length === 0)) { return <span>{nav}<div class={css.noData}>尚無比賽資料</div></span> }
       return <span>{nav}
         <div class={css.managerList}>
           <div class={css.dashId}>{render.dashboard.labels(race, nameTables)}</div>
