@@ -16,6 +16,10 @@
     "preact"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:azaitw/beardude_event_public.git"
+  },
   "author": "azai, justangon",
   "jest": {
     "setupFiles": [
