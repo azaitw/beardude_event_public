@@ -228,6 +228,10 @@ class Event extends Component {
     </span>
     let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={bgVideoHeight} src={`${event.promoVideo}${youtubeBasicParams}&loop=1`} frameborder='0' allowfullscreen /> : <div id='bgVideo' width='100%' height={bgVideoHeight} />
     let overlayText = ''
+    let announcement = ''
+    if (event.announcement && event.announcement !== '') {
+      announcement = <div class={css.announcement}>[公告] {event.announcement}</div>
+    }
     if (broadcastStatus === 'init') {
       overlayText = <div class={css.status}>成績將即時更新，決賽直播{processData.returnTime(event.streamingStart)}開始</div>
       stream = ''
@@ -252,7 +256,9 @@ class Event extends Component {
         <div class={css.mainBody} style={{minHeight: bgVideoHeight}}>
           <div class={css['wrap-' + broadcastStatus]}>
             <div class={css[(matches.tab === undefined) ? 'home' : matches.tab]}>
-              <div class={css.bgVideo}><div class={css.bgOverlay}>{overlayText}{bgOverlay}</div>{bgVideo}</div>
+              <div class={css.bgVideo}>
+                <div class={css.bgOverlay}>{announcement}{overlayText}{bgOverlay}</div>{bgVideo}
+              </div>
               {event.rules && event.rules !== '' && <div class={css.rulesTab}>{returnLineBreakText(event.rules)}</div>}
               {event.registerDesc && event.registerDesc !== '' && <div class={css.registerTab}>{returnLineBreakText(event.registerDesc)}</div>}
               <div class={css.liveTab}>{stream}</div>
