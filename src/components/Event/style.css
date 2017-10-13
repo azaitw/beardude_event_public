@@ -91,7 +91,7 @@
   to { opacity: 0.7; }
 }
 .bgOverlay .status,
-.bgOverlay .announcement {
+.announcement {
   text-align: center;
   align-self: center;
   font-size: 24px;
@@ -420,7 +420,7 @@
     padding: 15px 20px;
   }
   .bgOverlay .status,
-  .bgOverlay .announcement {
+  .announcement {
     font-size: 18px;
   }
 }
