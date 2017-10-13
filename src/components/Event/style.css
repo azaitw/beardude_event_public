@@ -152,15 +152,10 @@
 }
 .mobileWrap .bgOverlay {
   position: static;
+  padding: 10px 0 0 0;
 }
 .mobileWrap .bgVideo {
   opacity: 1;
-}
-.mobileWrap .bgOverlay .status {
-  position: absolute;
-  width: 100%;
-  top: 10px;
-  z-index: 10;
 }
 .mobileWrap .bgOverlay .info {
   font-size: 15px;
