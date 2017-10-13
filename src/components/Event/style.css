@@ -73,6 +73,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 .wrap-init .home .status,
 .wrap-init .home .dashboard {
@@ -418,7 +419,8 @@
   .rulesTab {
     padding: 15px 20px;
   }
-  .bgOverlay .status {
-    font-size: 20px;
+  .bgOverlay .status,
+  .bgOverlay .announcement {
+    font-size: 18px;
   }
 }
