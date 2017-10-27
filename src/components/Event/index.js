@@ -17,6 +17,11 @@ const render = {
       </button>
     </li>
   },
+  eventDateLocation: ({location, startTime}) => <div class={css.eventTitle}>
+    <div>{location}</div>
+    <div class={css.time}>{processData.returnDate(startTime)}</div>
+    <div class={css.time}>{processData.returnTime(startTime)}</div>
+  </div>,
   dashboard: {
     main: ({groups, races, raceSelected, nameTables, handleSelect}) => {
       const race = races[raceSelected]
@@ -65,6 +70,7 @@ class Event extends Component {
   _bind (...methods) { methods.forEach((method) => { if (this[method]) { this[method] = this[method].bind(this) } }) }
   constructor () {
     super()
+    this.youtubeParams = '?rel=0&controls=0&modestbranding=1&enablejsapi=1&autoplay=1&hd=1&autohide=1&showinfo=0&playsinline=1'
     this.bgVideo = undefined
     this.bgVideoIframe = undefined
     this.streamVideo = undefined
@@ -80,7 +86,6 @@ class Event extends Component {
       ongoingRace: undefined,
       bgVideoHeight: 315,
       streamHeight: 315,
-      isMobile: false,
       broadcastStatus: undefined
     }
     this._bind('socketIoEvents', 'handleSelect', 'updateRecords', 'updateOngoingRaces', 'setIframeHeight', 'updateBroadcastStatus')
@@ -149,6 +154,10 @@ class Event extends Component {
       }
       if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
         this.isMobile = true
+        // On mobile Youtube video is paused initially. start the video
+        if (this.state.broadcastStatus === 'init' && this.bgVideoIframe) { this.bgVideoIframe.playVideo() }
+        if (this.state.broadcastStatus === 'live' && this.streamVideoIframe) {
+          this.streamVideoIframe.playVideo() }
       }
       document.title = event.nameCht
       const info = event.name + ' - ' + event.location + ' ' + processData.returnDate(event.startTime) + ' ' + processData.returnTime(event.startTime)
@@ -167,13 +176,14 @@ class Event extends Component {
     window.removeEventListener('resize', this.setIframeHeight)
   }
   componentDidUpdate () {
-    if (this.state.broadcastStatus === 'ended' && this.bgVideoIframe) {
+    // bgVideo和stream並存的時候, 切換兩個影片時要暫停/開始
+    if (this.bgVideo && this.streamVideo) {
       if (this.props.matches.tab === 'live') {
-        this.bgVideoIframe.pauseVideo()
-        this.streamVideoIframe.playVideo()
+        if (this.bgVideoIframe) { this.bgVideoIframe.pauseVideo() }
+        if (this.streamVideoIframe) { this.streamVideoIframe.playVideo() }
       } else {
-        this.bgVideoIframe.playVideo()
-        this.streamVideoIframe.pauseVideo()
+        if (this.bgVideoIframe) { this.bgVideoIframe.playVideo() }
+        if (this.streamVideoIframe) { this.streamVideoIframe.pauseVideo() }
       }
     }
   }
@@ -216,59 +226,55 @@ class Event extends Component {
   render ({matches}, {event, groups, races, nameTables, raceSelected, streamHeight, bgVideoHeight, broadcastStatus}) {
     if (!event) { return <div class={css.wrap}><div class={css.loading}>Loading...</div></div> }
     const navs = [{key: 'live', name: '實況'}, {key: 'rules', name: '規則'}, {key: 'register', name: '報名'}]
-    const youtubeBasicParams = '?rel=0&controls=0&modestbranding=1&enablejsapi=1&autoplay=1&hd=1&autohide=1&showinfo=0&playsinline=1'
-    let stream = (event.streamingIframe && event.streamingIframe !== '') ? <iframe id='streamVideo' ref={c => (this.streamVideo = c)} class={css.stream} width='100%' height={streamHeight} src={`${event.streamingIframe}${youtubeBasicParams}`} frameborder='0' allowfullscreen /> : ''
-    let bgOverlay = <span>
-      <div class={css.info}>
-        <div class={css.location}>{event.location}</div>
-        <div>{processData.returnDate(event.startTime)}</div>
-        <div>{processData.returnTime(event.startTime)}</div>
-      </div>
-      <div class={css.credit}><a target='_blank' href='https://www.youtube.com/channel/UCgqJcN37au-Qa9HJ98c20CQ'>Video by Kadacha &copy; 2017</a></div>
-    </span>
-    let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={bgVideoHeight} src={`${event.promoVideo}${youtubeBasicParams}&loop=1`} frameborder='0' allowfullscreen /> : <div id='bgVideo' width='100%' height={bgVideoHeight} />
+    let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <div class={css.bgVideo}>{!this.isMobile && <div class={css.bgVideoMask} />}
+        <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={this.state.bgVideoHeight} src={`${event.promoVideo}${this.youtubeParams}&loop=1`} frameborder='0' allowfullscreen /><div class={css.videoCredit}><a target='_blank' href='https://www.youtube.com/channel/UCgqJcN37au-Qa9HJ98c20CQ'>Video by Kadacha &copy; 2017</a></div></div> : <div id='bgVideo' width='100%' height={bgVideoHeight} />
+    let dateLocation = render.eventDateLocation({ location: event.location, startTime: event.startTime })
     let overlayText = ''
-    let announcement = ''
-    if (event.announcement && event.announcement !== '') {
-      announcement = <div class={css.announcement}>[公告] {event.announcement}</div>
-    }
-    if (broadcastStatus === 'init') {
-      overlayText = <div class={css.status}>成績將即時更新，決賽直播{processData.returnTime(event.streamingStart)}開始</div>
-      stream = ''
-    } else if (broadcastStatus === 'started') {
-      overlayText = <div class={css.statusLive}>比賽進行中，預計 {processData.returnTime(event.streamingStart)} 開始轉播</div>
-      stream = ''
-    } else if (broadcastStatus === 'live') {
-      bgVideo = stream
-      bgOverlay = ''
-    }
+    let stream = (event.streamingIframe && event.streamingIframe !== '') ? <div class={css.streamVideo}><iframe id='streamVideo' ref={c => (this.streamVideo = c)} class={css.stream} width='100%' height={streamHeight} src={`${event.streamingIframe}${this.youtubeParams}`} frameborder='0' allowfullscreen /></div> : ''
+    let announcement = (event.announcement && event.announcement !== '') ? <div class={css.announcement}>[公告] {event.announcement}</div> : ''
+
     /*
-      時間 / tab
+      時間 / tab. 該時間點所有的tab內容都會render, 透過css控制顯示/隱藏, 如此切換tab的時候Youtube的影片不會中斷
                 home          live            rules           register
       init:     bgV           bgV+txt+board   bgV+rules       bgV+reg
-      started:  bgV+txt+board bgV+txt+board   bgV+rules       bgV+reg
+      started:  bgV+txt+board stream+txt+board   bgV+txt+rules   bgV+txt+reg
       live:     stream+board  stream+board    stream+rules    stream+reg    (bgV改成stream)
       ended:    bgV+board     stream+board    bgV+rules       bgV+reg
     */
+    switch (broadcastStatus) {
+    case 'init':
+      overlayText = <div class={css.overlayText}>成績將即時更新，決賽直播 {processData.returnTime(event.streamingStart)} 開始</div>
+      stream = ''
+      break
+    case 'started':
+      overlayText = <div class={css.overlayTextLive}>比賽進行中，預計 {processData.returnTime(event.streamingStart)} 開始轉播</div>
+      break
+    case 'live':
+      dateLocation = ''
+      bgVideo = ''
+      break
+    }
     return <div class={css.wrap}>
-      <div class={this.isMobile ? css.mobileWrap : css.desktopWrap}>
-        <Header name={event.nameCht} uniqueName={event.uniqueName} navs={navs} />
-        <div class={css.mainBody} style={{minHeight: bgVideoHeight}}>
-          <div class={css['wrap-' + broadcastStatus]}>
-            <div class={css[(matches.tab === undefined) ? 'home' : matches.tab]}>
-              <div class={css.bgVideo}>
-                <div class={css.bgOverlay}>{announcement}{overlayText}{bgOverlay}</div>{bgVideo}
-              </div>
-              {event.rules && event.rules !== '' && <div class={css.rulesTab}>{returnLineBreakText(event.rules)}</div>}
-              {event.registerDesc && event.registerDesc !== '' && <div class={css.registerTab}>{returnLineBreakText(event.registerDesc)}</div>}
-              <div class={css.liveTab}>{stream}</div>
-              <div class={css.dashboard}>{render.dashboard.main({nameTables, groups, races, raceSelected, handleSelect: this.handleSelect})}</div>
+      <Header name={event.nameCht} uniqueName={event.uniqueName} navs={navs} />
+      <div class={css.mainBody} style={{minHeight: bgVideoHeight}}>
+        <div class={css['wrap-' + broadcastStatus]}>
+          <div class={css[(matches.tab === undefined) ? 'home' : matches.tab]}>
+            <div class={css.herowrap}>
+              {announcement}
+              {overlayText}
+              {dateLocation}
+              {bgVideo}
+              {stream}
             </div>
+            {event.rules && event.rules !== '' && <div class={css.rulesTab}>{returnLineBreakText(event.rules)}</div>}
+            {event.registerDesc && event.registerDesc !== '' && <div class={css.registerTab}>{returnLineBreakText(event.registerDesc)}</div>}
+            <div class={css.liveTab}></div>
+            <div class={css.dashboard}>{render.dashboard.main({nameTables, groups, races, raceSelected, handleSelect: this.handleSelect})}</div>
           </div>
         </div>
-        <div class={css.footer}>
-          <span>Powered by Beardude Event <span>&copy;</span> <span>{new Date().getFullYear()}</span></span>
-        </div>
+      </div>
+      <div class={css.footer}>
+        <span>Powered by Beardude Event <span>&copy;</span> <span>{new Date().getFullYear()}</span></span>
       </div>
     </div>
   }

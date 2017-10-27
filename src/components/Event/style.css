@@ -3,51 +3,87 @@
   height: 100%;
   background: #000;
 }
-.mainBody {
+.mainBody, .mainBody>div, .herowrap {
   position: relative;
 }
-.registerTab,
-.rulesTab,
-.liveTab {
+.registerTab, .rulesTab, .liveTab, .dashboard, .streamVideo {
   display: none;
-}
-.mainBody>div {
-  position: relative;
-}
-.register>.registerTab,
-.rules>.rulesTab {
-  display: block;
   position: relative;
   z-index: 5;
 }
+.register>.registerTab,
+.rules>.rulesTab,
 .live>.liveTab {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  align-self: center;
-  font-size: 24px;
   display: block;
-  position: absolute;
 }
 .rulesTab,
 .registerTab {
   padding: 20px 30px;
   line-height: 32px;
 }
-.liveTab .txt {
-  display: absolute;
-  top: -33%;
+.overlayText {
+  display: none;
+}
+.overlayText,
+.overlayTextLive {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 100%;
+  font-size: 24px;
+  text-align: center;
+  z-index: 100;
+}
+/* 實況頁永遠顯示戰績; 比賽開始之後, 首頁顯示戰績 */
+.live .dashboard,
+.wrap-started .home .dashboard,
+.wrap-live .home .dashboard,
+.wrap-ended .home .dashboard {
+  display: block;
+}
+/* 實況頁顯示直播時間 */
+.live .overlayText {
+  display: block;
+  text-align: center;
+  align-self: center;
+}
+/* 顯示直播, 藏背景影片 */
+.wrap-started .live .streamVideo,
+.wrap-ended .live .streamVideo,
+.wrap-live .streamVideo {
+  display: block;
+}
+.wrap-started .live .bgVideo,
+.wrap-ended .live .bgVideo {
+  display: none;
+}
+.streamVideo {
+  position: relative;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  vertical-align: middle;
-  display: inline-block;
+  text-align: center;
+}
+@keyframes pulse1 {
+  from { opacity: 0.7; }
+  50% { opacity: 1; }
+  to { opacity: 0.7; }
+}
+.overlayTextLive {
+  animation-name: pulse1;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
 }
 .stream {
   margin: 0 auto;
-  max-width: 1137px;
+  display: inline-block;
+}
+.announcement {
+  background: #AA0905;
+  font-size: 16px;
+  padding: 10px 30px;
+  text-align: center;
 }
 .bgVideo {
   position: relative;
@@ -60,51 +96,15 @@
 .bgVideo iframe {
   opacity: 0.5;
 }
-.wrap-live .bgVideo iframe {
-  opacity: 1;
-}
-.bgOverlay {
+.bgVideoMask {
+  display: block;
+  content: "";
   position: absolute;
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
 }
-.wrap-init .home .status,
-.wrap-init .home .dashboard {
-  display: none;
-}
-.rules .dashboard,
-.register .dashboard,
-.rules .status,
-.register .status {
-  display: none;
-}
-@keyframes pulse1 {
-  from { opacity: 0.7; }
-  50% { opacity: 1; }
-  to { opacity: 0.7; }
-}
-.bgOverlay .status,
-.announcement {
-  text-align: center;
-  align-self: center;
-  font-size: 24px;
-}
-.bgOverlay .statusLive {
-  text-align: center;
-  align-self: center;
-  font-size: 40px;
-  animation-name: pulse1;
-  animation-duration: 1.5s;
-  animation-iteration-count: infinite;
-}
-.bgOverlay .info {
+.eventTitle {
   position: absolute;
   left: 30px;
   bottom: 20px;
@@ -112,17 +112,19 @@
   color: #eee;
   font-size: 26px;
   line-height: 44px;
-  font-family: Palatino;
   z-index: 10;
   opacity: 0.9;
   text-align: left;
+}
+.eventTitle .time {
+  font-family: Palatino;
 }
 @keyframes dissolve {
   from { opacity: 1; background: #000; }
   90% { opacity: 1; background: #000; }
   to { opacity: 0.5; }
 }
-.bgOverlay .credit {
+.videoCredit {
   position: absolute;
   right: 0;
   width: 100%;
@@ -139,37 +141,13 @@
   opacity: 0.5;
   font-size: 15px;
 }
-.bgOverlay .credit a:link,
-.bgOverlay .credit a:visited {
+.videoCredit a:link,
+.videoCredit a:visited {
   text-decoration: none;
   color: #eee;
 }
-.bgOverlay .credit a:hover {
+.videoCredit a:hover {
   text-decoration: underline;
-}
-.bgOverlay .location {
-  font-family: Helvetica;
-}
-.mobileWrap .bgOverlay {
-  position: static;
-  padding: 10px 0 0 0;
-}
-.mobileWrap .bgVideo {
-  opacity: 1;
-}
-.mobileWrap .bgOverlay .info {
-  font-size: 15px;
-  line-height: 20px;
-  bottom: 10px;
-  left: 20px;
-}
-.mobileWrap .bgOverlay .credit {
-  bottom: 0;
-  background: transparent;
-  height: 20px;
-  line-height: 20px;
-  font-size: 13px;
-  padding: 0 20px 0 0;
 }
 .loading,
 .noData {
@@ -182,13 +160,6 @@
 }
 .noData {
   margin: 20px auto;
-}
-.info h2 {
-  font-size: 16px;
-  font-weight: 300;
-  letter-spacing: 0.4px;
-  margin: 0 0 3px 0;
-  display: inline-block;
 }
 .managerList {
   position: relative;
@@ -395,11 +366,17 @@
   font-size: 11px;
   text-align :center;
 }
-@media only screen and (max-width : 700px) {
+
+@media only screen and (max-width: 740px) {
   .raceSelector .li button,
   .raceSelector .selected button {
-     padding: 0 5px;
+    padding: 0 5px;
     font-size: 13px;
+  }
+  .rulesTab,
+  .registerTab {
+    padding: 10px 15px;
+    line-height: 28px;
   }
   .dashId th:first-child,
   .dashId td:first-child {
@@ -411,11 +388,26 @@
     padding: 0 8px;
     min-width: 20px;
   }
-  .rulesTab {
-    padding: 15px 20px;
-  }
-  .bgOverlay .status,
-  .announcement {
+  .overlayText,
+  .overlayTextLive {
+    top: 30px;
     font-size: 18px;
+  }
+  .bgVideo {
+    opacity: 1;
+  }
+  .eventTitle {
+    font-size: 15px;
+    line-height: 20px;
+    bottom: 10px;
+    left: 20px;
+  }
+  .videoCredit {
+    bottom: 0;
+    background: transparent;
+    height: 20px;
+    line-height: 20px;
+    font-size: 13px;
+    padding: 0 20px 0 0;
   }
 }
