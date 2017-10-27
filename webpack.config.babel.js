@@ -30,8 +30,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
-    filename: 'bundle.[chunkhash].js',
-    chunkFilename: 'bundle.[chunkhash].js'
+    filename: 'bundle.[hash].js',
+    chunkFilename: 'bundle.[hash].js'
   },
 
   resolve: {
@@ -71,7 +71,7 @@ module.exports = {
           use: [
             {
               loader: 'css-loader',
-              options: { modules: true, sourceMap: CSS_MAPS, importLoaders: 1 }
+              options: { modules: true, sourceMap: CSS_MAPS, importLoaders: 1, minimize: true }
             },
             {
               loader: `postcss-loader`,
@@ -93,7 +93,7 @@ module.exports = {
           use: [
             {
               loader: 'css-loader',
-              options: { sourceMap: CSS_MAPS, importLoaders: 1 }
+              options: { sourceMap: CSS_MAPS, importLoaders: 1, minimize: true }
             },
             {
               loader: `postcss-loader`,
@@ -125,7 +125,7 @@ module.exports = {
     new WebpackChunkHash(),
     new webpack.NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({
-      filename: 'style.css',
+      filename: 'style.[hash].css',
       allChunks: true,
       disable: ENV !== 'production'
     }),
