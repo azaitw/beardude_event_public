@@ -156,8 +156,7 @@ class Event extends Component {
         this.isMobile = true
         // On mobile Youtube video is paused initially. start the video
         if (this.state.broadcastStatus === 'init' && this.bgVideoIframe) { this.bgVideoIframe.playVideo() }
-        if (this.state.broadcastStatus === 'live' && this.streamVideoIframe) {
-          this.streamVideoIframe.playVideo() }
+        if (this.state.broadcastStatus === 'live' && this.streamVideoIframe) { this.streamVideoIframe.playVideo() }
       }
       document.title = event.nameCht
       const info = event.name + ' - ' + event.location + ' ' + processData.returnDate(event.startTime) + ' ' + processData.returnTime(event.startTime)
@@ -226,8 +225,7 @@ class Event extends Component {
   render ({matches}, {event, groups, races, nameTables, raceSelected, streamHeight, bgVideoHeight, broadcastStatus}) {
     if (!event) { return <div class={css.wrap}><div class={css.loading}>Loading...</div></div> }
     const navs = [{key: 'live', name: '實況'}, {key: 'rules', name: '規則'}, {key: 'register', name: '報名'}]
-    let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <div class={css.bgVideo}>{!this.isMobile && <div class={css.bgVideoMask} />}
-        <iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={this.state.bgVideoHeight} src={`${event.promoVideo}${this.youtubeParams}&loop=1`} frameborder='0' allowfullscreen /><div class={css.videoCredit}><a target='_blank' href='https://www.youtube.com/channel/UCgqJcN37au-Qa9HJ98c20CQ'>Video by Kadacha &copy; 2017</a></div></div> : <div id='bgVideo' width='100%' height={bgVideoHeight} />
+    let bgVideo = (event.promoVideo && event.promoVideo !== '') ? <div class={css.bgVideo}>{!this.isMobile && <div class={css.bgVideoMask} />}<iframe id='bgVideo' ref={c => (this.bgVideo = c)} width='100%' height={this.state.bgVideoHeight} src={`${event.promoVideo}${this.youtubeParams}&loop=1`} frameborder='0' allowfullscreen /><div class={css.videoCredit}><a target='_blank' href='https://www.youtube.com/channel/UCgqJcN37au-Qa9HJ98c20CQ'>Video by Kadacha &copy; 2017</a></div></div> : <div id='bgVideo' width='100%' height={bgVideoHeight} />
     let dateLocation = render.eventDateLocation({ location: event.location, startTime: event.startTime })
     let overlayText = ''
     let stream = (event.streamingIframe && event.streamingIframe !== '') ? <div class={css.streamVideo}><iframe id='streamVideo' ref={c => (this.streamVideo = c)} class={css.stream} width='100%' height={streamHeight} src={`${event.streamingIframe}${this.youtubeParams}`} frameborder='0' allowfullscreen /></div> : ''
@@ -242,17 +240,17 @@ class Event extends Component {
       ended:    bgV+board     stream+board    bgV+rules       bgV+reg
     */
     switch (broadcastStatus) {
-    case 'init':
-      overlayText = <div class={css.overlayText}>成績將即時更新，決賽直播 {processData.returnTime(event.streamingStart)} 開始</div>
-      stream = ''
-      break
-    case 'started':
-      overlayText = <div class={css.overlayTextLive}>比賽進行中，預計 {processData.returnTime(event.streamingStart)} 開始轉播</div>
-      break
-    case 'live':
-      dateLocation = ''
-      bgVideo = ''
-      break
+      case 'init':
+        overlayText = <div class={css.overlayText}>成績將即時更新，決賽直播 {processData.returnTime(event.streamingStart)} 開始</div>
+        stream = ''
+        break
+      case 'started':
+        overlayText = <div class={css.overlayTextLive}>比賽進行中，預計 {processData.returnTime(event.streamingStart)} 開始轉播</div>
+        break
+      case 'live':
+        dateLocation = ''
+        bgVideo = ''
+        break
     }
     return <div class={css.wrap}>
       <Header name={event.nameCht} uniqueName={event.uniqueName} navs={navs} />
@@ -268,7 +266,6 @@ class Event extends Component {
             </div>
             {event.rules && event.rules !== '' && <div class={css.rulesTab}>{returnLineBreakText(event.rules)}</div>}
             {event.registerDesc && event.registerDesc !== '' && <div class={css.registerTab}>{returnLineBreakText(event.registerDesc)}</div>}
-            <div class={css.liveTab}></div>
             <div class={css.dashboard}>{render.dashboard.main({nameTables, groups, races, raceSelected, handleSelect: this.handleSelect})}</div>
           </div>
         </div>

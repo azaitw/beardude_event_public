@@ -6,14 +6,13 @@
 .mainBody, .mainBody>div, .herowrap {
   position: relative;
 }
-.registerTab, .rulesTab, .liveTab, .dashboard, .streamVideo {
+.registerTab, .rulesTab, .dashboard, .streamVideo {
   display: none;
   position: relative;
   z-index: 5;
 }
 .register>.registerTab,
-.rules>.rulesTab,
-.live>.liveTab {
+.rules>.rulesTab {
   display: block;
 }
 .rulesTab,
