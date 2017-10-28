@@ -29,7 +29,7 @@ module.exports = {
 */
   output: {
     path: path.resolve(__dirname, 'build'),
-    publicPath: './',
+    publicPath: '/',
     filename: 'bundle.[hash].js',
     chunkFilename: 'bundle.[hash].js'
   },
