@@ -109,7 +109,6 @@ class Event extends Component {
       this.socketIoEvents()
       this.setIframeHeight()
       this.updateBroadcastStatus()
-      //obj.raceSelected = processData.returnSelectedRace(this.state.races, obj.ongoingRace)
       this.setState({ raceSelected: processData.returnSelectedRace(this.state.races, res.system.ongoingRace) })
       if (this.bgVideo) {
         this.bgVideoIframe = YouTubePlayer('bgVideo')
