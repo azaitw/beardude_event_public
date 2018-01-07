@@ -81,70 +81,36 @@ class Event extends Component {
       groups: undefined,
       races: undefined,
       registrations: undefined,
+      system: undefined,
       nameTables: {},
       raceSelected: 0,
-      ongoingRace: undefined,
       bgVideoHeight: 315,
       streamHeight: 315,
       broadcastStatus: undefined
     }
-    this._bind('socketIoEvents', 'handleSelect', 'updateRecords', 'updateOngoingRaces', 'setIframeHeight', 'updateBroadcastStatus')
-  }
-  updateOngoingRaces (toSelectRace) {
-    let obj = { ongoingRace: (this.state.event.ongoingRace === -1) ? undefined : processData.returnOngoingRace(this.state.event.ongoingRace, this.state.races) }
-    if (toSelectRace) { obj.raceSelected = processData.returnSelectedRace(this.state.races, obj.ongoingRace) }
-    this.setState(obj)
-  }
-  // 按延遲的時間差, 依序/依時間差更新比賽成績
-  updateRacesLater (deferredTimes, races, latency, regs) {
-    const allowance = 3000
-    if (deferredTimes.length > 0) {
-      deferredTimes.map(time => {
-        setTimeout(function () {
-          let newRaces = races.map(race => {
-            let output = {...race, recordsHashTable: processData.returnDeferredHashTable(race.recordsHashTable, time)}
-            output.raceStatus = processData.returnDeferredRaceStatus(output.raceStatus, latency, output.endTime)
-            return output
-          })
-          this.setState({races: newRaces})
-        }.bind(this), time + allowance)
-      })
-    }
+    this._bind('socketIoEvents', 'handleSelect', 'setIframeHeight', 'updateBroadcastStatus')
   }
   componentDidMount () {
     const getEvent = async (successCallback) => {
       const response = await fetch(`/api/event/info/${this.props.matches.uniqueName}`, {credentials: 'include'})
       if (response.status === 200) {
         const res = await response.json()
-        let deferredTimes = []
-        // 檢查有無延遲期間更新的資料, client第一次開啟頁面時做計算
-        const races = res.races.map((V, I) => {
-          let output = {...V}
-          let defer = []
-          output.recordsHashTable = processData.returnDeferredHashTable(output.recordsHashTable, res.event.resultLatency)
-          output.raceStatus = processData.returnDeferredRaceStatus(output.raceStatus, res.event.resultLatency, output.endTime)
-          output.result = processData.returnRaceResult(output, res.registrations)
-          defer = processData.returnDeferredTimeArray(V.recordsHashTable, output.recordsHashTable, res.event.resultLatency)
-          deferredTimes = deferredTimes.concat(defer)
-          return output
-        })
-        this.setState({
+        return this.setState({
           event: res.event,
           groups: res.groups,
-          races: races,
+          races: res.races,
           registrations: res.registrations,
           nameTables: { group: processData.returnIdNameMap(res.groups), race: processData.returnIdNameMap(res.races), reg: processData.returnRegMap(res.registrations) }
-        }, function () { successCallback() })
-        return this.updateRacesLater(deferredTimes, races, res.event.resultLatency, res.registrations)
+        }, function () { successCallback(res) })
       }
       return route('/')
     }
-    const onSuccess = () => {
-      const event = this.state.event
+    const onSuccess = (res) => {
       this.socketIoEvents()
-      this.updateOngoingRaces(true)
       this.setIframeHeight()
       this.updateBroadcastStatus()
+      //obj.raceSelected = processData.returnSelectedRace(this.state.races, obj.ongoingRace)
+      this.setState({ raceSelected: processData.returnSelectedRace(this.state.races, res.system.ongoingRace) })
       if (this.bgVideo) {
         this.bgVideoIframe = YouTubePlayer('bgVideo')
         this.bgVideoIframe.mute()
@@ -158,6 +124,7 @@ class Event extends Component {
         if (this.state.broadcastStatus === 'init' && this.bgVideoIframe) { this.bgVideoIframe.playVideo() }
         if (this.state.broadcastStatus === 'live' && this.streamVideoIframe) { this.streamVideoIframe.playVideo() }
       }
+      // TO DO: 改用next, 這些都用head去包
       document.title = event.nameCht
       const info = event.name + ' - ' + event.location + ' ' + processData.returnDate(event.startTime) + ' ' + processData.returnTime(event.startTime)
       document.description = info
@@ -165,6 +132,7 @@ class Event extends Component {
       document.querySelector('meta[name=\'description\']').content = info
       document.querySelector('meta[property=\'og:description\']').content = info
     }
+
     if (!this.props.matches.uniqueName) { return route('/') }
     this.socketio = io(window.location.origin)
     window.addEventListener('resize', this.setIframeHeight)
@@ -203,7 +171,7 @@ class Event extends Component {
       fetch(`/api/socket/info?sid=${this.socketio.id}`, {credentials: 'include'}).then(V => { if (callback !== undefined) { callback() } })
     }.bind(this))
     this.socketio.on('eventlatencyupdate', function (data) {
-      this.setState({ event: {...this.state.event, resultLatency: data.event.resultLatency} })
+      this.setState({ system: {...this.state.system, resultLatency: data.system.resultLatency} })
     }.bind(this))
     this.socketio.on('raceupdate', function (data) {
       setTimeout(function () {
@@ -213,7 +181,7 @@ class Event extends Component {
     this.socketio.on('raceend', function (data) {
       setTimeout(function () {
         this.setState({
-          event: {...this.state.event, ongoingRace: ''},
+          event: {...this.state.event},
           races: processData.updateRaces(this.state.races, data.races, this.state.registrations)
         })
       }.bind(this), this.state.event.resultLatency)
